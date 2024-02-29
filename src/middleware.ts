@@ -17,8 +17,17 @@ export async function middleware(req: NextRequest) {
     console.log("🚀 ~ middleware ~ homePage:", homePage)
 
     // Set a custom header or cookie
-    const response = NextResponse.next();
-    response.cookies.set('homePage', homePage);
+    const requestHeader = new Headers(req.headers);
+    requestHeader.set('homePage', homePage);
+    const response = NextResponse.next({
+        request: {
+            headers: requestHeader,
+        }
+    });
+    response.cookies.set('homePage', homePage, {
+        sameSite: 'lax',
+        maxAge: 30,
+    });
 
     return response;
 }

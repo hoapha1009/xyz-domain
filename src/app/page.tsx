@@ -1,13 +1,13 @@
 import ABC from '@/components/pages/abc'
 import Default from '@/components/pages/default'
 import XYZ from '@/components/pages/xyz'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 
 
 export default function Home() {
   const cookieStore = cookies()
   console.log("🚀 ~ Home ~ cookieStore:", cookieStore)
-  const homePage = cookieStore.get('homePage')
+  const homePage = cookieStore.get('homePage')?.value || headers().get('homePage')
   const cookieList = cookieStore.getAll()
   console.log("🚀 ~ Home ~ cookieList:", cookieList)
   console.log("🚀 ~ Home ~ homePage:", { homePage })
@@ -15,8 +15,8 @@ export default function Home() {
 
 
 
-  if (homePage?.value === 'abc') return <ABC />
-  if (homePage?.value === 'xyz') return <XYZ />
-  if (homePage?.value === 'default') return <Default />
+  if (homePage === 'abc') return <ABC />
+  if (homePage === 'xyz') return <XYZ />
+  if (homePage === 'default') return <Default />
   else return <>Hello</>
 }
